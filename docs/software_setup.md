@@ -1,11 +1,11 @@
 # Software Installation Guide for Wanderer Robot.
 This guide helps you with Wanderer's software installation. A brand new Jetson TX2 is about to become a fully prepared iRobot rider (Take a deep breathe, let's rock.).
 
-## [Jetpack](https://developer.nvidia.com/embedded/jetpack) Installation
-Find out Jetpack download link and related materials [here](https://developer.nvidia.com/embedded/jetpack). Full-flash TX2 with Jetpack 3.2.
+## [Jetpack3.3](https://developer.nvidia.com/embedded/jetpack) Installation
+Find out Jetpack download link and related materials [here](https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3). Full-flash TX2 with Jetpack 3.3.
 
 ## Post Flash
-**Caution: DO NOT** `$ sudo apt upgrade` before you build the patched kernel!!! 
+**Caution: DO NOT `$ sudo apt upgrade` anytime!!!** 
 #### Patch kernel \& install librealsense 
 1. Open terminal by `Ctrl``Alt``t`, clone the repo that contains all the tools we are going to need.
 ```
@@ -14,8 +14,8 @@ git clone https://github.com/jetsonhacks/buildLibrealsense2TX
 cd buildLibrealsense2TX
 git checkout v0.9
 ```
-2. Build patched kernel `$ ./buildPatchedKernelTX.sh` and reboot TX2 after installation.
-3. Install ***librealsense*** `$ ./installLibrealsense.sh`
+2. Touch `buildPatchedKernelTX.sh` with your favorite text editor. Modify *line 11* to `LIBREALSENSE_VERSION=v2.16.1`, then build patched kernel `$ ./buildPatchedKernelTX.sh` and reboot TX2 after installation.
+3. Install *[librealsense](https://github.com/IntelRealSense/librealsense)* Touch `installLibrealsense.sh` and change *line 10* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./installLibrealsense.sh`
 #### Update and upgrade
 > Again, **DO NOT** perform `upgrade` before you build the patched kernel!!!
 ```
