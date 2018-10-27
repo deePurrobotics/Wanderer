@@ -55,6 +55,52 @@ source ~/.bashrc
 ## Build [ORB-SLAM2](https://github.com/raulmur/ORB_SLAM2)
 > Stay tuned, coming soon...
 
+## Install [create_autonomy](https://github.com/AutonomyLab/create_autonomy.git)
+#### Compile from source
+1. Create a catkin workspace  
+    ```
+    $ cd ~
+    $ mkdir -p create_ws/src  
+    $ cd create_ws  
+    $ catkin init  
+    ```
+2. Clone this repo  
+    ```
+    $ cd ~/create_ws/src
+    $ git clone https://github.com/AutonomyLab/create_autonomy.git  
+    ```
+3. Install dependencies  
+    ```
+    $ cd ~/create_ws
+    $ rosdep update  
+    $ rosdep install --from-paths src -i  
+    ```
+4. Build  
+    ```
+    $ cd ~/create_ws
+    $ catkin build
+    ```
+5. In order to connect to Create over USB, ensure your user is in the dialout group
+    ```
+    $ sudo usermod -a -G dialout nvidia
+    ```
+6. Logout and login for permission to take effect
+#### Running the driver
+
+1. After compiling from source, don't forget to source your workspace:  
+    ```
+    $ source ~/create_ws/devel/setup.bash
+    ```
+2. Connect TX2 to Create's 7-pin serial port, plug logitech joy-pad wireless receiver in TX2's usb-hub.
+3. For Create 2 (Roomba 600/700 series):
+```
+$ roslaunch ca_driver create_2.launch
+```
+4. Remote control using a Logitech F710 joy-pad
+```
+$ roslaunch ca_tools joy_teleop.launch [joy_config:=log710]
+```
+
 ## (Optional) Install [libfreenect2](https://github.com/OpenKinect/libfreenect2/blob/master/README.md#linux)
 > You will need this if you were using a Kinect V2 RGB-D camera
 * Download libfreenect2 source
@@ -101,51 +147,6 @@ catkin build --cmake-args -DCMAKE_BUILD_TYPE="Release"
 `$ roslaunch kinect2_bridge kinect2_bridge.launch`
 3. Calibrate your sensor using the `kinect2_calibration`. Follow the [instructions](https://github.com/code-iai/iai_kinect2/tree/master/kinect2_calibration#calibrating-the-kinect-one). Beware, you will have to take hundreds of screenshots manually, which is really time consuming and boring (Ask a girl to help you out XD). 
 
-## Install [create_autonomy](https://github.com/AutonomyLab/create_autonomy.git)
-#### Compile from source
-1. Create a catkin workspace  
-    ```
-    $ cd ~
-    $ mkdir -p create_ws/src  
-    $ cd create_ws  
-    $ catkin init  
-    ```
-2. Clone this repo  
-    ```
-    $ cd ~/create_ws/src
-    $ git clone https://github.com/AutonomyLab/create_autonomy.git  
-    ```
-3. Install dependencies  
-    ```
-    $ cd ~/create_ws
-    $ rosdep update  
-    $ rosdep install --from-paths src -i  
-    ```
-4. Build  
-    ```
-    $ cd ~/create_ws
-    $ catkin build
-    ```
-5. In order to connect to Create over USB, ensure your user is in the dialout group
-    ```
-    $ sudo usermod -a -G dialout nvidia
-    ```
-6. Logout and login for permission to take effect
-#### Running the driver
-
-1. After compiling from source, don't forget to source your workspace:  
-    ```
-    $ source ~/create_ws/devel/setup.bash
-    ```
-2. Connect TX2 to Create's 7-pin serial port, plug logitech joy-pad wireless receiver in TX2's usb-hub.
-3. For Create 2 (Roomba 600/700 series):
-```
-$ roslaunch ca_driver create_2.launch
-```
-4. Remote control using a Logitech F710 joy-pad
-```
-$ roslaunch ca_tools joy_teleop.launch [joy_config:=log710]
-```
 ~~## Install [realsense2 ROS wrapper](https://github.com/intel-ros/realsense)~~
 ~~1. If not using Kinect v2, and no libfreenect2 and iai_kinect2 were configured, then you'll have to install some dependencies:~~
 ~~`sudo apt install ros-kinetic-cv-bridge ros-kinetic-image-common`~~
