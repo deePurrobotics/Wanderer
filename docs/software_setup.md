@@ -15,14 +15,8 @@ cd buildLibrealsense2TX
 git checkout v0.9
 ```
 2. Touch `buildPatchedKernelTX.sh` with your favorite text editor. Modify *line 11* to `LIBREALSENSE_VERSION=v2.16.1`, then build patched kernel `$ ./buildPatchedKernelTX.sh` and reboot TX2 after installation.
-3. Install *[librealsense](https://github.com/IntelRealSense/librealsense)* Touch `installLibrealsense.sh` and change *line 10* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./installLibrealsense.sh`
-#### Update and upgrade
+3. Install *[librealsense](https://github.com/IntelRealSense/librealsense)*. Touch `installLibrealsense.sh` and change *line 10* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./installLibrealsense.sh`
 > Again, **DO NOT** perform `upgrade` before you build the patched kernel!!!
-```
-$ sudo apt update
-$ sudo apt upgrade
-```
-This may take a while...
 
 ## Install emacs
 `$ sudo apt install emacs`<br/>
@@ -32,9 +26,34 @@ config emacs by going to home directory `$ cd ~` then `$ git clone https://githu
 ~~You may reference to this [post](https://devtalk.nvidia.com/default/topic/988803/jetson-tx1/how-to-set-tx1-to-use-static-ip-on-ethernet-port/post/5061512/#5061512)~~
 
 ## Install ROS-Kinetic
-`$ cd ~` then `$ git clone https://github.com/linZHank/installROSTX2.git`<br/>
-`$ cd installROSTX2` then `$ ./installROS.sh`<br/>
-This will install ros-kinetic-base and neccessary tools including [catkin-command-line-tools](http://catkin-tools.readthedocs.io/en/latest/)
+1. `$ cd ~` then `$ git clone https://github.com/linZHank/installROSTX2.git`<br/>
+2. `$ cd installROSTX2` then `$ ./installROS.sh`<br/>
+This will install ros-kinetic-base and neccessary tools including [catkin-command-line-tools](http://catkin-tools.readthedocs.io/en/latest/)</br>
+
+## Install [ROS wrapper for RealSense]
+- Create a catkin workspace 
+> Somehow, I cannot build ROS wrapper for RealSense with catkin-command-line-tools, so I have two catkin workspace(`catkin_ws` for RealSense and ORB-SLAM2, `ros_ws` for other packages. both are under `/home/nvidia`)
+```bash
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src/
+git clone https://github.com/intel-ros/realsense/tree/2.1.0
+git checkout 2.1.0
+catkin_init_workspace 
+cd ..
+
+```
+```bash
+catkin_init_workspace 
+cd ..
+catkin_make clean
+catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
+catkin_make install
+echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+## Build [ORB-SLAM2](https://github.com/raulmur/ORB_SLAM2)
+> Stay tuned, coming soon...
 
 ## (Optional) Install [libfreenect2](https://github.com/OpenKinect/libfreenect2/blob/master/README.md#linux)
 > You will need this if you were using a Kinect V2 RGB-D camera
@@ -127,20 +146,18 @@ $ roslaunch ca_driver create_2.launch
 ```
 $ roslaunch ca_tools joy_teleop.launch [joy_config:=log710]
 ```
-## Install [realsense2 ROS wrapper](https://github.com/intel-ros/realsense)
+~~## Install [realsense2 ROS wrapper](https://github.com/intel-ros/realsense)
 1. If not using Kinect v2, and no libfreenect2 and iai_kinect2 were configured, then you'll have to install some dependencies:
-```
-sudo apt install ros-kinetic-cv-bridge ros-kinetic-image-common
-```
+~~`sudo apt install ros-kinetic-cv-bridge ros-kinetic-image-common`
 2. Clone latest realsense2 wrapper
-```
+~~```
 cd ~/ros_ws/src/
 git clone https://github.com/intel-ros/realsense.git
 cd ..
 catkin build --cmake-args -DCMAKE_BUILD_TYPE=Release
-```
+~~```
 3. Test 
-roslaunch realsense2_camera rs_camera.launch
+~~roslaunch realsense2_camera rs_camera.launch
 
-## Install [rtabmap_ros](http://wiki.ros.org/rtabmap_ros)
+## (Optional) Install [rtabmap_ros](http://wiki.ros.org/rtabmap_ros)
 `$ sudo apt-get install ros-kinetic-rtabmap-ros`
