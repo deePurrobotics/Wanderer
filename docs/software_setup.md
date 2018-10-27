@@ -14,7 +14,7 @@ git clone https://github.com/jetsonhacks/buildLibrealsense2TX
 cd buildLibrealsense2TX
 git checkout v0.9
 ```
-2. Touch `buildPatchedKernelTX.sh` with your favorite text editor. Modify *line 11* to `LIBREALSENSE_VERSION=v2.16.1`, then build patched kernel `$ ./buildPatchedKernelTX.sh` and reboot TX2 after installation.
+2. Build patched kernel. Touch `buildPatchedKernelTX.sh` with your favorite text editor. Modify *line 11* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./buildPatchedKernelTX.sh` and reboot TX2 after installation.
 3. Install *[librealsense](https://github.com/IntelRealSense/librealsense)*. Touch `installLibrealsense.sh` and change *line 10* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./installLibrealsense.sh`
 > Again, **DO NOT** perform `upgrade` before you build the patched kernel!!!
 
