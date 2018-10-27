@@ -7,7 +7,7 @@ Find out Jetpack download link and related materials [here](https://developer.nv
 ## Post Flash
 **Caution: DO NOT `$ sudo apt upgrade` anytime!!!** 
 #### Patch kernel \& install librealsense 
-1. Open terminal by `Ctrl``Alt``t`, clone the repo that contains all the tools we are going to need.
+1. Open terminal by `Ctrl` `Alt` `t`, clone the repo that contains all the tools we are going to need.
 ```
 cd $HOME
 git clone https://github.com/jetsonhacks/buildLibrealsense2TX
