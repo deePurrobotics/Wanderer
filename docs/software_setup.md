@@ -14,7 +14,7 @@ git clone https://github.com/jetsonhacks/buildLibrealsense2TX
 cd buildLibrealsense2TX
 git checkout v0.9
 ```
-2. Build patched kernel. Touch `buildPatchedKernelTX.sh` with your favorite text editor. Modify *line 11* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./buildPatchedKernelTX.sh` and reboot TX2 after installation.
+2. Build patched kernel. Touch `buildPatchedKernelTX.sh` with your favorite text editor. Modify *line 11* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./buildPatchedKernel.sh` and reboot TX2 after installation.
 3. Install *[librealsense](https://github.com/IntelRealSense/librealsense)*. Touch `installLibrealsense.sh` and change *line 10* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./installLibrealsense.sh`
 > Again, **DO NOT** perform `upgrade` before you build the patched kernel!!!
 
@@ -36,8 +36,8 @@ This will install ros-kinetic-base and neccessary tools including [catkin-comman
 ```bash
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src/
-git clone https://github.com/intel-ros/realsense/tree/2.1.0
-git checkout 2.1.0
+git clone https://github.com/intel-ros/realsense.git
+git checkout 2.1.2
 catkin_init_workspace 
 cd ..
 
@@ -46,6 +46,15 @@ cd ..
 catkin_init_workspace 
 cd ..
 catkin_make clean
+```
+> After excuting this command, the system will notice fatals. Then, you need to install some documents.
+```bash
+sudo apt stall ROS-kinetic-cv-bridge 
+sudo apt stall ROS-kinetic-tf
+sudo apt stall ROS-kinetic-image-common
+sudo apt stall ROS-kinetic-diagnostic-updater 
+sudo apt stall ROS-kinetic-image-view
+sudo apt stall ROS-kinetic-rviz 
 catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
 catkin_make install
 echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
@@ -96,9 +105,18 @@ source ~/.bashrc
 ```
 $ roslaunch ca_driver create_2.launch
 ```
+**NOTICE:**Make sure the Create is not in charge on the charge-base before excuting this command.
 4. Remote control using a Logitech F710 joy-pad
 ```
 $ roslaunch ca_tools joy_teleop.launch [joy_config:=log710]
+```
+   If use a keybord instead of the joy-pad
+```
+$ rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+```
+5. Open the onboard camera
+```
+$ roslanuch realsense2_camera rs-rgbd.lanuch
 ```
 
 ## (Optional) Install [libfreenect2](https://github.com/OpenKinect/libfreenect2/blob/master/README.md#linux)
