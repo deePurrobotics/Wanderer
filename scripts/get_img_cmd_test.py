@@ -26,7 +26,7 @@ if __name__ == '__main__':
   rospy.Subscriber("color/image_raw", Image, rgb_cb)
   command_pool = []
   image_pool = []
-  rate = rospy.Rate(10) # 10 Hz
+  rate = rospy.Rate(5) # 10 Hz
   while not rospy.is_shutdown():
     command_pool.append(cmd_vel)
     image_pool.append(cv_image)
