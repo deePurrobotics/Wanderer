@@ -2,11 +2,11 @@
 This guide helps you with Wanderer's software installation. A brand new Jetson TX2 is about to become a fully prepared iRobot rider (Take a deep breathe, let's rock.).
 
 ## [Jetpack3.3](https://developer.nvidia.com/embedded/jetpack) Installation
-Find out Jetpack download link and related materials [here](https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3). Full-flash TX2 with Jetpack 3.3.
+Find out Jetpack download link and related materials [here](https://developer.nvidia.com/embedded/downloads#?search=jetpack%203.3). Full-flash TX2 with Jetpack 3.3.1
 
 ## Post Flash
-**Caution: DO NOT `$ sudo apt upgrade` anytime!!!** 
-#### Patch kernel \& install librealsense 
+**Caution: DO NOT `$ sudo apt upgrade` anytime!!!**
+#### Patch kernel \& install librealsense
 1. Open terminal by `Ctrl` `Alt` `t`, clone the repo that contains all the tools we are going to need.
 ```
 cd $HOME
@@ -14,15 +14,17 @@ git clone https://github.com/jetsonhacks/buildLibrealsense2TX
 cd buildLibrealsense2TX
 git checkout v0.9
 ```
-2. Build patched kernel. Touch `buildPatchedKernelTX.sh` with your favorite text editor. Modify *line 11* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./buildPatchedKernel.sh` and reboot TX2 after installation.
-3. Install *[librealsense](https://github.com/IntelRealSense/librealsense)*. Touch `installLibrealsense.sh` and change *line 10* to `LIBREALSENSE_VERSION=v2.16.1`, then `$ ./installLibrealsense.sh`
+2. Build patched kernel. Touch `buildPatchedKernelTX.sh` with your favorite text editor. Modify *line 11* to `LIBREALSENSE_VERSION=v2.21.0`, then `$ ./buildPatchedKernel.sh` and reboot TX2 after installation.
+3. Install *[librealsense](https://github.com/IntelRealSense/librealsense)*. Touch `installLibrealsense.sh` and change *line 10* to `LIBREALSENSE_VERSION=v2.21.0`, then `$ ./installLibrealsense.sh`
 > Again, **DO NOT** perform `upgrade` before you build the patched kernel!!!
 
-## Install emacs
-`$ sudo apt install emacs`<br/>
-config emacs by going to home directory `$ cd ~` then `$ git clone https://github.com/linZHank/.emacs.d.git`. Fire up emacs `$ emacs` to start installing packages and setting things up.
+~~## (Optional) Install emacs~~
+
+~~`$ sudo apt install emacs`
+config emacs by going to home directory `$ cd ~` then `$ git clone https://github.com/linZHank/.emacs.d.git`. Fire up emacs `$ emacs` to start installing packages and setting things up.~~
 
 ~~## Set static ip address~~
+
 ~~You may reference to this [post](https://devtalk.nvidia.com/default/topic/988803/jetson-tx1/how-to-set-tx1-to-use-static-ip-on-ethernet-port/post/5061512/#5061512)~~
 
 ## Install ROS-Kinetic
@@ -31,38 +33,37 @@ config emacs by going to home directory `$ cd ~` then `$ git clone https://githu
 This will install ros-kinetic-base and neccessary tools including [catkin-command-line-tools](http://catkin-tools.readthedocs.io/en/latest/)</br>
 
 ## Install [ROS wrapper for RealSense]
-- Create a catkin workspace 
-> Somehow, I cannot build ROS wrapper for RealSense with catkin-command-line-tools, so I have two catkin workspace(`catkin_ws` for RealSense and ORB-SLAM2, `ros_ws` for other packages. both are under `/home/nvidia`)
-```bash
+
+1. Create a catkin workspace
+```console
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src/
 git clone https://github.com/intel-ros/realsense.git
-git checkout 2.1.2
-catkin_init_workspace 
-cd ..
-
+cd realsense
+git checkout 2.2.3
+cd ~/ros_ws
+catkin init
 ```
-```bash
-catkin_init_workspace 
-cd ..
-catkin_make clean
+2. Install dependencies (may not limited to the following)
+```console
+sudo apt update
+sudo apt install ros-kinetic-cv-bridge ros-kinetic-image-transport ros-kinetic-tf ros-kinetic-diagnostic-updater ros-kinetic-image-view ros-kinetic-rviz ros-kinetic-rqt
 ```
-> After excuting this command, the system will notice fatals. Then, you need to install some documents.
-```bash
-sudo apt stall ROS-kinetic-cv-bridge 
-sudo apt stall ROS-kinetic-tf
-sudo apt stall ROS-kinetic-image-common
-sudo apt stall ROS-kinetic-diagnostic-updater 
-sudo apt stall ROS-kinetic-image-view
-sudo apt stall ROS-kinetic-rviz 
-catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
-catkin_make install
-echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+3. Build RealSense ROS wrapper
+```console
+cd ~/ros_ws
+catkin build --cmake-args -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
+echo "source ~/ros_ws/devel/setup.bash" >> ~/.bashrc
 source ~/.bashrc
+```
+4. Test RealSense ROS
+```console
+roslaunch realsense2_camera rs_camera.launch
 ```
 
 ## Build [ORB-SLAM2](https://github.com/raulmur/ORB_SLAM2)
 > Stay tuned, coming soon...
+> **Update:** coming in 1024 years
 
 ## Install [create_autonomy](https://github.com/AutonomyLab/create_autonomy.git)
 #### Compile from source
@@ -163,7 +164,7 @@ catkin build --cmake-args -DCMAKE_BUILD_TYPE="Release"
 ```
 2. Connect your sensor and run kinect2_bridge:
 `$ roslaunch kinect2_bridge kinect2_bridge.launch`
-3. Calibrate your sensor using the `kinect2_calibration`. Follow the [instructions](https://github.com/code-iai/iai_kinect2/tree/master/kinect2_calibration#calibrating-the-kinect-one). Beware, you will have to take hundreds of screenshots manually, which is really time consuming and boring (Ask a girl to help you out XD). 
+3. Calibrate your sensor using the `kinect2_calibration`. Follow the [instructions](https://github.com/code-iai/iai_kinect2/tree/master/kinect2_calibration#calibrating-the-kinect-one). Beware, you will have to take hundreds of screenshots manually, which is really time consuming and boring (Ask a girl to help you out XD).
 
 ~~## Install [realsense2 ROS wrapper](https://github.com/intel-ros/realsense)~~
 ~~1. If not using Kinect v2, and no libfreenect2 and iai_kinect2 were configured, then you'll have to install some dependencies:~~
@@ -175,7 +176,7 @@ catkin build --cmake-args -DCMAKE_BUILD_TYPE="Release"
 ~~cd ..~~
 ~~catkin build --cmake-args -DCMAKE_BUILD_TYPE=Release~~
 ~~```~~
-~~3. Test~~ 
+~~3. Test~~
 ~~roslaunch realsense2_camera rs_camera.launch~~
 
 ## (Optional) Install [rtabmap_ros](http://wiki.ros.org/rtabmap_ros)
